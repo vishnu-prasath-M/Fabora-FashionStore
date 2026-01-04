@@ -20,6 +20,14 @@ const orderSchema = mongoose.Schema(
                 },
                 size: { type: String },
                 color: { type: String },
+                isCancelled: {
+                    type: Boolean,
+                    required: true,
+                    default: false,
+                },
+                cancelledAt: {
+                    type: Date,
+                },
             },
         ],
         shippingAddress: {
@@ -72,6 +80,14 @@ const orderSchema = mongoose.Schema(
             default: false,
         },
         deliveredAt: {
+            type: Date,
+        },
+        isCancelled: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
+        cancelledAt: {
             type: Date,
         },
     },

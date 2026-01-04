@@ -11,6 +11,7 @@ const OrdersPage = () => {
     const dispatch = useDispatch();
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
+    const [selectedItemId, setSelectedItemId] = useState(null);
 
     const { userInfo } = useSelector((state) => state.auth);
     const { orders, loading } = useSelector((state) => state.order);
@@ -23,15 +24,16 @@ const OrdersPage = () => {
         }
     }, [dispatch, navigate, userInfo]);
 
-    const handleCancelClick = (id) => {
-        setSelectedOrderId(id);
+    const handleCancelClick = (orderId, itemId) => {
+        setSelectedOrderId(orderId);
+        setSelectedItemId(itemId);
         setShowCancelModal(true);
     };
 
     const confirmCancel = async () => {
         try {
-            await dispatch(cancelOrder(selectedOrderId)).unwrap();
-            toast.success('Sequence terminated successfully', {
+            await dispatch(cancelOrder({ orderId: selectedOrderId, itemId: selectedItemId })).unwrap();
+            toast.success('Item terminated successfully', {
                 icon: '🛡️',
                 style: {
                     borderRadius: '1rem',
@@ -46,8 +48,12 @@ const OrdersPage = () => {
         }
     };
 
+    const isOrderFullyCancelled = (order) => {
+        return (order.orderItems || []).every((i) => i && i.isCancelled);
+    };
+
     const getStatusColor = (order) => {
-        if (order.isCancelled) return 'bg-red-50 text-red-600 border-red-100';
+        if (isOrderFullyCancelled(order)) return 'bg-red-50 text-red-600 border-red-100';
         if (order.isDelivered) return 'bg-emerald-50 text-emerald-600 border-emerald-100';
         return 'bg-blue-50 text-blue-600 border-blue-100';
     };
@@ -84,12 +90,14 @@ const OrdersPage = () => {
                     </div>
                 ) : (
                     <div className="space-y-12">
-                        {orders?.map((order) => (
+                        {(orders || []).filter(order => order && order._id).map((order) => (
                             <div key={order._id} className="group">
                                 {/* Order Metadata Card */}
-                                <div className="bg-white rounded-[2.5rem] border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-gray-100 transition-all duration-500">
+                                <div className={`bg-white rounded-[2.5rem] border overflow-hidden shadow-sm transition-all duration-500
+                                    ${isOrderFullyCancelled(order) ? 'border-gray-100 opacity-70 grayscale' : 'border-gray-100 hover:shadow-xl hover:shadow-gray-100'}`}>
                                     {/* Order Upper Bar */}
-                                    <div className="px-10 py-8 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                    <div className={`px-10 py-8 border-b flex flex-col md:flex-row md:items-center justify-between gap-6
+                                        ${isOrderFullyCancelled(order) ? 'bg-gray-50 border-gray-100 text-gray-400' : 'border-gray-50'}`}>
                                         <div className="flex items-center gap-8">
                                             <div>
                                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Reference ID</p>
@@ -107,30 +115,22 @@ const OrdersPage = () => {
 
                                         <div className="flex items-center gap-6">
                                             <div className={`px-5 py-2.5 rounded-full border text-[10px] font-bold uppercase tracking-widest ${getStatusColor(order)}`}>
-                                                {order.isCancelled ? 'Cancelled' : order.isDelivered ? 'Delivered' : 'Processing'}
+                                                {order.isDelivered ? 'Delivered' : 'Processing'}
                                             </div>
-                                            {!order.isCancelled && !order.isDelivered && (
-                                                <button
-                                                    onClick={() => handleCancelClick(order._id)}
-                                                    className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all"
-                                                    title="Cancel Order"
-                                                >
-                                                    <XCircle className="w-5 h-5" />
-                                                </button>
-                                            )}
                                         </div>
                                     </div>
 
                                     {/* Order Items Section */}
                                     <div className="px-10 py-10">
                                         <div className="space-y-8">
-                                            {order.orderItems?.map((item, index) => (
-                                                <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-8 group/item">
-                                                    <div className="w-24 h-32 bg-gray-50 rounded-2xl overflow-hidden flex-shrink-0 border border-gray-100 shadow-sm transition-transform duration-500 group-hover/item:scale-105">
+                                            {(order.orderItems || []).filter(item => item).map((item, index) => (
+                                                <div key={index} className={`flex flex-col sm:flex-row sm:items-center gap-8 group/item ${item.isCancelled ? 'opacity-70' : ''}`}>
+                                                    <div className={`w-24 h-32 rounded-2xl overflow-hidden flex-shrink-0 border shadow-sm transition-transform duration-500 group-hover/item:scale-105
+                                                        ${item.isCancelled ? 'bg-gray-100 border-gray-100' : 'bg-gray-50 border-gray-100'}`}>
                                                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                                     </div>
                                                     <div className="flex-1">
-                                                        <h4 className="text-xl font-heading font-bold text-gray-900 mb-2 tracking-tight line-clamp-1">{item.name}</h4>
+                                                        <h4 className={`text-xl font-heading font-bold mb-2 tracking-tight line-clamp-1 ${item.isCancelled ? 'text-gray-400' : 'text-gray-900'}`}>{item.name}</h4>
                                                         <div className="flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-gray-400">
                                                             <span>PRICE: ₹{item.price.toLocaleString()}</span>
                                                             <span className="w-1 h-1 bg-gray-200 rounded-full self-center"></span>
@@ -138,7 +138,25 @@ const OrdersPage = () => {
                                                         </div>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-xl font-heading font-bold text-gray-900">₹{(item.price * item.qty).toLocaleString()}</p>
+                                                        <p className={`text-xl font-heading font-bold mb-4 ${item.isCancelled ? 'text-gray-400' : 'text-gray-900'}`}>₹{(item.price * item.qty).toLocaleString()}</p>
+                                                        {item.isCancelled ? (
+                                                            <div className="w-full text-center">
+                                                                <span className="text-red-500 font-bold text-sm uppercase tracking-widest">Item terminated successfully</span>
+                                                            </div>
+                                                        ) : !order.isDelivered && (
+                                                            <button
+                                                                onClick={() => handleCancelClick(order._id, item._id)}
+                                                                disabled={loading && selectedOrderId === order._id && selectedItemId === item._id}
+                                                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border font-bold text-[10px] uppercase tracking-widest transition-all
+                                                                    ${loading && selectedOrderId === order._id && selectedItemId === item._id
+                                                                        ? 'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed opacity-60'
+                                                                        : 'bg-gray-50 text-gray-500 hover:bg-red-50 hover:text-red-600 border-gray-100 hover:border-red-100'}`}
+                                                                title="Cancel Item"
+                                                            >
+                                                                <XCircle className="w-3.5 h-3.5" />
+                                                                <span>{loading && selectedOrderId === order._id && selectedItemId === item._id ? 'Cancelling...' : 'Cancel Item'}</span>
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))}
@@ -146,11 +164,12 @@ const OrdersPage = () => {
                                     </div>
 
                                     {/* Footer Section */}
-                                    <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-50 flex flex-col sm:flex-row items-center justify-between gap-6">
+                                    <div className={`px-10 py-8 border-t flex flex-col sm:flex-row items-center justify-between gap-6
+                                        ${isOrderFullyCancelled(order) ? 'bg-gray-50 border-gray-100 text-gray-400' : 'bg-gray-50/50 border-gray-50'}`}>
                                         <div>
                                             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Financial Summary</p>
                                             <div className="flex items-baseline gap-2">
-                                                <span className="text-2xl font-heading font-bold text-gray-900">₹{order.totalPrice?.toLocaleString()}</span>
+                                                <span className={`text-2xl font-heading font-bold ${isOrderFullyCancelled(order) ? 'text-gray-400' : 'text-gray-900'}`}>₹{(order.totalPrice || 0).toLocaleString()}</span>
                                                 <span className="text-xs font-bold text-gray-400">TOTAL</span>
                                             </div>
                                         </div>
@@ -189,15 +208,17 @@ const OrdersPage = () => {
                             <div className="flex flex-col gap-4">
                                 <button
                                     onClick={confirmCancel}
-                                    className="w-full px-8 py-5 rounded-2xl bg-red-500 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-red-600 transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-red-200"
+                                    disabled={loading}
+                                    className={`w-full px-8 py-4 rounded-2xl text-sm font-bold uppercase tracking-widest transition-all shadow-xl
+                                        ${loading ? 'bg-red-300 text-white cursor-not-allowed shadow-red-100' : 'bg-red-500 text-white hover:bg-red-600 shadow-red-200'}`}
                                 >
-                                    Proceed with Termination
+                                    {loading ? 'Processing...' : 'Yes'}
                                 </button>
                                 <button
                                     onClick={() => setShowCancelModal(false)}
-                                    className="w-full px-8 py-5 rounded-2xl bg-gray-50 text-gray-900 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-100 transition-all active:scale-95"
+                                    className="w-full px-8 py-4 rounded-2xl bg-gray-50 text-gray-900 text-sm font-bold uppercase tracking-widest hover:bg-gray-100 transition-all"
                                 >
-                                    No, Keep My Acquisition
+                                    No
                                 </button>
                             </div>
                         </div>

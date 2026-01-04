@@ -98,11 +98,57 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Cancel order item
+// @route   PUT /api/orders/:id/cancel/:itemId
+// @access  Private
+const cancelOrder = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    const itemId = req.body.itemId;
+
+    if (order) {
+        if (order.user.toString() !== req.user._id.toString() && !req.user.isAdmin) {
+            res.status(401);
+            throw new Error('Not authorized to cancel this order');
+        }
+
+        const item = order.orderItems.find(x => x._id.toString() === itemId);
+
+        if (!item) {
+            res.status(404);
+            throw new Error('Order item not found');
+        }
+
+        if (order.isDelivered) {
+            res.status(400);
+            throw new Error('Cannot cancel a delivered order');
+        }
+
+        if (item.isCancelled) {
+            res.status(400);
+            throw new Error('Item is already cancelled');
+        }
+
+        item.isCancelled = true;
+        item.cancelledAt = Date.now();
+
+        // Optionally recalculate totals or track refund amount here
+        // For now, we keep the original total but mark the item as cancelled
+        // If you want to update totalPrice:
+        // order.totalPrice -= item.price * item.qty;
+
+        const updatedOrder = await order.save();
+        res.json(updatedOrder);
+    } else {
+        res.status(404);
+        throw new Error('Order not found');
+    }
+});
+
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private
 const getMyOrders = asyncHandler(async (req, res) => {
-    const orders = await Order.find({ user: req.user._id });
+    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
     res.json(orders);
 });
 
@@ -119,6 +165,7 @@ export {
     getOrderById,
     updateOrderToPaid,
     updateOrderToDelivered,
+    cancelOrder,
     getMyOrders,
     getOrders,
 };

@@ -1,39 +1,44 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { fetchFakestoreProducts, setCategory } from '../redux/slices/fakestoreSlice';
+import { listProducts } from '../redux/slices/productSlice';
 import ProductCard from '../components/ProductCard';
 import SkeletonProductCard from '../components/SkeletonProductCard';
 import { Filter, X } from 'lucide-react';
 
 const ShopPage = () => {
     const [searchParams] = useSearchParams();
+    const categoryFromUrl = searchParams.get('category') || 'all';
+
     const [showFilters, setShowFilters] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
     const [sortBy, setSortBy] = useState('');
 
+    useEffect(() => {
+        setSelectedCategory(categoryFromUrl);
+    }, [categoryFromUrl]);
+
     const dispatch = useDispatch();
-    const { products, loading, error } = useSelector((state) => state.fakestore);
+    const { products, loading, error } = useSelector((state) => state.product);
 
     const keyword = searchParams.get('search') || '';
 
     useEffect(() => {
-        dispatch(fetchFakestoreProducts(selectedCategory));
+        dispatch(listProducts({ category: selectedCategory }));
     }, [dispatch, selectedCategory]);
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
-        dispatch(setCategory(category));
         setShowFilters(false);
     };
 
     const handleRetry = () => {
-        dispatch(fetchFakestoreProducts(selectedCategory));
+        dispatch(listProducts({ category: selectedCategory }));
     };
 
     const searchFilteredProducts = keyword
         ? products.filter((p) =>
-            p.title.toLowerCase().includes(keyword.toLowerCase()) ||
+            p.name.toLowerCase().includes(keyword.toLowerCase()) ||
             p.description.toLowerCase().includes(keyword.toLowerCase())
         )
         : products;
@@ -41,16 +46,19 @@ const ShopPage = () => {
     const sortedProducts = [...searchFilteredProducts].sort((a, b) => {
         if (sortBy === 'price-low') return a.price - b.price;
         if (sortBy === 'price-high') return b.price - a.price;
-        if (sortBy === 'name') return a.title.localeCompare(b.title);
-        if (sortBy === 'rating') return (b.rating?.rate || 0) - (a.rating?.rate || 0);
+        if (sortBy === 'name') return a.name.localeCompare(b.name);
+        if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
         return 0;
     });
 
     const categories = [
         { value: 'all', label: 'All Collection' },
-        { value: 'men', label: "Gentlemen" },
-        { value: 'women', label: "Ladies" },
-        { value: 'jewelery', label: "Accessories" },
+        { value: 'T-Shirts', label: "T-Shirts" },
+        { value: 'Jackets', label: "Jackets" },
+        { value: 'Pants', label: "Pants" },
+        { value: 'Dresses', label: "Dresses" },
+        { value: 'Shoes', label: "Shoes" },
+        { value: 'Accessories', label: "Accessories" },
     ];
 
     return (
@@ -86,8 +94,8 @@ const ShopPage = () => {
                                         key={category.value}
                                         onClick={() => handleCategoryChange(category.value)}
                                         className={`group flex items-center justify-between w-full text-left py-2 text-[15px] font-medium transition-all duration-300 ${selectedCategory === category.value
-                                                ? 'text-gray-900 border-b border-gray-900'
-                                                : 'text-gray-400 hover:text-gray-900'
+                                            ? 'text-gray-900 border-b border-gray-900'
+                                            : 'text-gray-400 hover:text-gray-900'
                                             }`}
                                     >
                                         {category.label}
@@ -139,9 +147,9 @@ const ShopPage = () => {
                     ) : (
                         <>
                             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12 sm:gap-x-10 sm:gap-y-16">
-                                {sortedProducts.map((product) => (
-                                    <div key={product.id} className="h-full">
-                                        <ProductCard product={product} isFakestoreProduct={true} />
+                                {(sortedProducts || []).filter(p => p && (p._id || p.id)).map((product) => (
+                                    <div key={product._id || product.id} className="h-full">
+                                        <ProductCard product={product} isFakestoreProduct={!product._id} />
                                     </div>
                                 ))}
                             </div>

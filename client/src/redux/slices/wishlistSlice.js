@@ -12,16 +12,20 @@ const wishlistSlice = createSlice({
     reducers: {
         addToWishlist: (state, action) => {
             const item = action.payload;
-            const existItem = state.wishlistItems.find((x) => x._id === item._id);
+            if (!item) return;
+
+            const itemId = item._id || item.id;
+            const existItem = state.wishlistItems.find((x) => (x?._id || x?.id) === itemId);
 
             if (!existItem) {
-                state.wishlistItems = [...state.wishlistItems, item];
+                state.wishlistItems = [...state.wishlistItems, item].filter(Boolean);
                 localStorage.setItem('wishlistItems', JSON.stringify(state.wishlistItems));
             }
         },
         removeFromWishlist: (state, action) => {
+            const idToRemove = action.payload;
             state.wishlistItems = state.wishlistItems.filter(
-                (x) => x._id !== action.payload
+                (x) => x && (x._id !== idToRemove && x.id !== idToRemove)
             );
             localStorage.setItem('wishlistItems', JSON.stringify(state.wishlistItems));
         },

@@ -82,10 +82,10 @@ const ContactPage = () => {
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     required
-                                    className="peer w-full border-b-2 border-gray-200 py-3 text-gray-900 focus:border-gray-900 focus:outline-none bg-transparent placeholder-transparent"
+                                    className="peer w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none placeholder-transparent"
                                     placeholder="Name"
                                 />
-                                <label className="absolute left-0 -top-3.5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-900">
+                                <label className="absolute left-2 -top-3.5 px-1 bg-white text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:left-4 peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:left-2 peer-focus:px-1 peer-focus:text-sm peer-focus:text-gray-900">
                                     Your Name
                                 </label>
                             </div>
@@ -95,10 +95,10 @@ const ContactPage = () => {
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     required
-                                    className="peer w-full border-b-2 border-gray-200 py-3 text-gray-900 focus:border-gray-900 focus:outline-none bg-transparent placeholder-transparent"
+                                    className="peer w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none placeholder-transparent"
                                     placeholder="Email"
                                 />
-                                <label className="absolute left-0 -top-3.5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-900">
+                                <label className="absolute left-2 -top-3.5 px-1 bg-white text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:left-4 peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:left-2 peer-focus:px-1 peer-focus:text-sm peer-focus:text-gray-900">
                                     Email Address
                                 </label>
                             </div>
@@ -110,10 +110,10 @@ const ContactPage = () => {
                                 value={formData.subject}
                                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                                 required
-                                className="peer w-full border-b-2 border-gray-200 py-3 text-gray-900 focus:border-gray-900 focus:outline-none bg-transparent placeholder-transparent"
+                                className="peer w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none placeholder-transparent"
                                 placeholder="Subject"
                             />
-                            <label className="absolute left-0 -top-3.5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-900">
+                            <label className="absolute left-2 -top-3.5 px-1 bg-white text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:left-4 peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:left-2 peer-focus:px-1 peer-focus:text-sm peer-focus:text-gray-900">
                                 Subject
                             </label>
                         </div>
@@ -124,10 +124,10 @@ const ContactPage = () => {
                                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                 required
                                 rows={4}
-                                className="peer w-full border-b-2 border-gray-200 py-3 text-gray-900 focus:border-gray-900 focus:outline-none bg-transparent placeholder-transparent resize-none"
+                                className="peer w-full px-4 py-3 text-gray-900 bg-white border-2 border-gray-300 rounded-xl focus:border-gray-900 focus:outline-none placeholder-transparent resize-none"
                                 placeholder="Message"
                             ></textarea>
-                            <label className="absolute left-0 -top-3.5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-900">
+                            <label className="absolute left-2 -top-3.5 px-1 bg-white text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:left-4 peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-3.5 peer-focus:left-2 peer-focus:px-1 peer-focus:text-sm peer-focus:text-gray-900">
                                 How can we help?
                             </label>
                         </div>

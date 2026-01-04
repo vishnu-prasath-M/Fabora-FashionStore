@@ -23,8 +23,9 @@ const CartPage = () => {
     };
 
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
-    const shipping = subtotal > 100 ? 0 : 10;
-    const tax = subtotal * 0.1;
+    const shipping = 0; // Free delivery
+    const taxRate = 0.18;
+    const tax = subtotal * taxRate;
     const total = subtotal + shipping + tax;
 
     const checkoutHandler = () => {
@@ -66,7 +67,7 @@ const CartPage = () => {
                                     </Link>
                                     {item.size && <p className="text-gray-600 mt-1">Size: {item.size}</p>}
                                     {item.color && <p className="text-gray-600">Color: {item.color}</p>}
-                                    <p className="text-2xl font-bold text-primary mt-2">${item.price}</p>
+                                    <p className="text-2xl font-bold text-primary mt-2">₹{item.price.toLocaleString()}</p>
 
                                     <div className="flex items-center gap-4 mt-4">
                                         <div className="flex items-center gap-2">
@@ -108,21 +109,21 @@ const CartPage = () => {
                             <div className="space-y-3 mb-6">
                                 <div className="flex justify-between">
                                     <span className="text-gray-600">Subtotal</span>
-                                    <span className="font-semibold">${subtotal.toFixed(2)}</span>
+                                    <span className="font-semibold">₹{subtotal.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-gray-600">Shipping</span>
                                     <span className="font-semibold">
-                                        {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                                        {shipping === 0 ? 'FREE' : `₹${shipping.toLocaleString()}`}
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span className="text-gray-600">Tax</span>
-                                    <span className="font-semibold">${tax.toFixed(2)}</span>
+                                    <span className="text-gray-600">Tax (18%)</span>
+                                    <span className="font-semibold">₹{tax.toLocaleString()}</span>
                                 </div>
                                 <div className="border-t pt-3 flex justify-between text-xl font-bold">
                                     <span>Total</span>
-                                    <span className="text-primary">${total.toFixed(2)}</span>
+                                    <span className="text-primary">₹{total.toLocaleString()}</span>
                                 </div>
                             </div>
 

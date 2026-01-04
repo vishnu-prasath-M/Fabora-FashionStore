@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { listProductDetails } from '../redux/slices/productSlice';
 import { addToCart } from '../redux/slices/cartSlice';
 import Loader from '../components/Loader';
-import { ShoppingCart, Heart, Minus, Plus, ChevronLeft, Share2, Star } from 'lucide-react';
+import { ShoppingCart, Heart, Minus, Plus, ChevronLeft, Share2, Star, ShoppingBag, Truck, RefreshCw, Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const ProductDetailsPage = () => {
@@ -15,6 +15,7 @@ const ProductDetailsPage = () => {
     const [qty, setQty] = useState(1);
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
     const { product, loading } = useSelector((state) => state.product);
     const { userInfo } = useSelector((state) => state.auth);
@@ -49,6 +50,13 @@ const ProductDetailsPage = () => {
     };
 
     const buyNowHandler = () => {
+        if (!userInfo) {
+            setShowLoginPrompt(true);
+            setTimeout(() => {
+                navigate('/login?redirect=/ordering');
+            }, 1400);
+            return;
+        }
         addToCartHandler();
         // Requirement: Buy Now should redirect DIRECTLY to Ordering page
         navigate('/ordering');
@@ -59,6 +67,20 @@ const ProductDetailsPage = () => {
     return (
         <div className="bg-white min-h-screen">
             <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-10">
+                {showLoginPrompt && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
+                        <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl p-10 w-full max-w-sm text-center animate-in fade-in">
+                            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gray-900 text-white flex items-center justify-center animate-pulse">
+                                <Lock className="w-10 h-10" />
+                            </div>
+                            <h3 className="text-2xl font-heading font-bold text-gray-900 mb-2 tracking-tight">Login before order</h3>
+                            <p className="text-gray-500 mb-6">Redirecting to login...</p>
+                            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-gray-900 animate-[progress_1.4s_ease-in-out_forwards]"></div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* Back Link */}
                 <button
                     onClick={() => navigate(-1)}

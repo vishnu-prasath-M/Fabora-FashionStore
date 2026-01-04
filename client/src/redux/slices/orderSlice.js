@@ -26,10 +26,10 @@ export const createOrder = createAsyncThunk(
         }
     }
 );
-            
+
 export const cancelOrder = createAsyncThunk(
     'order/cancel',
-    async (orderId, { getState, rejectWithValue }) => {
+    async ({ orderId, itemId }, { getState, rejectWithValue }) => {
         try {
             const {
                 auth: { userInfo },
@@ -41,7 +41,7 @@ export const cancelOrder = createAsyncThunk(
                 },
             };
 
-            const { data } = await axios.put(`/orders/${orderId}/cancel`, {}, config);
+            const { data } = await axios.put(`/orders/${orderId}/cancel`, { itemId }, config);
             return data;
         } catch (error) {
             return rejectWithValue(
@@ -159,7 +159,10 @@ const orderSlice = createSlice({
             .addCase(createOrder.fulfilled, (state, action) => {
                 state.loading = false;
                 state.success = true;
-                state.order = action.payload;
+                state.order = action.payload || null;
+                if (action.payload && Array.isArray(state.orders)) {
+                    state.orders = [action.payload, ...state.orders].filter(Boolean);
+                }
             })
             .addCase(createOrder.rejected, (state, action) => {
                 state.loading = false;
@@ -192,14 +195,16 @@ const orderSlice = createSlice({
             })
             .addCase(cancelOrder.fulfilled, (state, action) => {
                 state.loading = false;
+                if (!action.payload) return;
+
                 // Update current order if it matches
                 if (state.order && state.order._id === action.payload._id) {
                     state.order = action.payload;
                 }
                 // Update in orders list
-                state.orders = state.orders.map((o) =>
-                    o._id === action.payload._id ? action.payload : o
-                );
+                state.orders = (state.orders || []).map((o) =>
+                    o && o._id === action.payload._id ? action.payload : o
+                ).filter(Boolean);
             })
             .addCase(cancelOrder.rejected, (state, action) => {
                 state.loading = false;

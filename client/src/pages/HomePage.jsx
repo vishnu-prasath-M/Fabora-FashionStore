@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFakestoreProducts, setCategory } from '../redux/slices/fakestoreSlice';
+import { listProducts } from '../redux/slices/productSlice';
 import ProductCard from '../components/ProductCard';
 import SkeletonProductCard from '../components/SkeletonProductCard';
 import { ArrowRight, ShieldCheck, Truck, RefreshCw, Mail } from 'lucide-react';
@@ -10,17 +10,18 @@ import toast from 'react-hot-toast';
 
 const HomePage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const heroRef = useRef(null);
     const productsRef = useRef(null);
     const [email, setEmail] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
 
-    const { products, loading, error } = useSelector((state) => state.fakestore);
+    const { products, loading, error } = useSelector((state) => state.product);
 
     useEffect(() => {
-        // Fetch all fashion products on mount
-        dispatch(fetchFakestoreProducts('all'));
-    }, [dispatch]);
+        // Fetch all products from local backend
+        dispatch(listProducts({ category: activeCategory }));
+    }, [dispatch, activeCategory]);
 
     useEffect(() => {
         // GSAP Hero Animation
@@ -88,8 +89,7 @@ const HomePage = () => {
 
     const handleCategoryFilter = (category) => {
         setActiveCategory(category);
-        dispatch(setCategory(category));
-        dispatch(fetchFakestoreProducts(category));
+        dispatch(listProducts({ category }));
     };
 
     const handleNewsletterSubmit = (e) => {
@@ -101,7 +101,7 @@ const HomePage = () => {
     };
 
     const handleRetry = () => {
-        dispatch(fetchFakestoreProducts(activeCategory));
+        dispatch(listProducts({ category: activeCategory }));
     };
 
     // Get featured products (first 12 for denser grid)
@@ -213,27 +213,27 @@ const HomePage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
                             {
-                                id: 'men',
-                                title: "Men's Collection",
-                                img: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=2600&auto=format&fit=crop",
-                                link: '/shop?category=men'
+                                id: 'T-Shirts',
+                                title: "Premium Tees",
+                                img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=2600&auto=format&fit=crop",
+                                link: '/shop?category=T-Shirts'
                             },
                             {
-                                id: 'women',
-                                title: "Women's Collection",
-                                img: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2600&auto=format&fit=crop",
-                                link: '/shop?category=women'
+                                id: 'Dresses',
+                                title: "Women's Couture",
+                                img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2600&auto=format&fit=crop",
+                                link: '/shop?category=Dresses'
                             },
                             {
-                                id: 'jewelery',
-                                title: "Accessories",
+                                id: 'Accessories',
+                                title: "Designer Trinkets",
                                 img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2600&auto=format&fit=crop",
-                                link: '/shop?category=jewelery'
+                                link: '/shop?category=Accessories'
                             }
                         ].map((cat) => (
                             <div
                                 key={cat.id}
-                                onClick={() => handleCategoryFilter(cat.id)}
+                                onClick={() => navigate(cat.link)}
                                 className="group cursor-pointer relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-2xl shadow-lg border border-gray-100"
                             >
                                 <img
@@ -271,9 +271,9 @@ const HomePage = () => {
                         </div>
                     ) : (
                         <div ref={productsRef} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                            {featuredProducts.slice(0, 10).map((product) => (
-                                <div key={product.id} className="product-card-reveal product-card h-full">
-                                    <ProductCard product={product} isFakestoreProduct={true} />
+                            {(featuredProducts || []).filter(p => p && (p._id || p.id)).map((product) => (
+                                <div key={product._id || product.id} className="product-card-reveal product-card h-full">
+                                    <ProductCard product={product} isFakestoreProduct={!product._id} />
                                 </div>
                             ))}
                         </div>
@@ -318,9 +318,9 @@ const HomePage = () => {
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                        {displayBestSellers.slice(0, 5).map((product) => (
-                            <div key={product.id} className="product-card-reveal h-full">
-                                <ProductCard product={product} isFakestoreProduct={true} />
+                        {(displayBestSellers || []).slice(0, 5).filter(p => p && (p._id || p.id)).map((product) => (
+                            <div key={product._id || product.id} className="product-card-reveal h-full">
+                                <ProductCard product={product} isFakestoreProduct={!product._id} />
                             </div>
                         ))}
                     </div>
@@ -379,14 +379,14 @@ const HomePage = () => {
                         Join our exclusive circle for early access to curated collections,
                         industry insights, and private invitations.
                     </p>
-                    <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-0 max-w-xl mx-auto bg-gray-50 p-1.5 rounded-[2rem] border border-gray-100 shadow-sm">
+                    <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-0 max-w-xl mx-auto bg-gray-50 p-1.5 rounded-[2rem] shadow-sm">
                         <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Email address"
                             required
-                            className="flex-1 px-8 py-4 bg-transparent text-gray-900 focus:outline-none placeholder:text-gray-400"
+                            className="flex-1 px-8 py-4 bg-transparent text-gray-900 focus:outline-none focus:ring-0 focus:ring-offset-0 placeholder:text-gray-400 border-none"
                         />
                         <button
                             type="submit"

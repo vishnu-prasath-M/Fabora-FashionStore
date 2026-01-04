@@ -7,7 +7,9 @@
     "start": "node server/server.js",
     "server": "cd server && npm start",
     "client": "cd client && npm run dev",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "cd server && npm run data:import",
+    "data:destroy": "cd server && npm run data:destroy"
   },
   "keywords": [],
   "author": "",

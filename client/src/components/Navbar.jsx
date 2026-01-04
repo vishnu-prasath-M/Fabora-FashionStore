@@ -138,21 +138,7 @@ const Navbar = () => {
         >
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center">
-                    {/* Mobile menu button */}
-                    <div className="flex items-center md:hidden">
-                        <button
-                            onClick={() => setIsOpen(!isOpen)}
-                            className="text-gray-700 hover:text-primary-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-                            aria-expanded="false"
-                        >
-                            <span className="sr-only">Open main menu</span>
-                            {isOpen ? (
-                                <X className="h-6 w-6" aria-hidden="true" />
-                            ) : (
-                                <Menu className="h-6 w-6" aria-hidden="true" />
-                            )}
-                        </button>
-                    </div>
+                    {/* Mobile menu button (removed duplicate, single control kept on right) */}
 
                     {/* Logo */}
                     <motion.div 
@@ -381,6 +367,7 @@ const Navbar = () => {
                             onClick={() => setIsOpen(!isOpen)}
                             className="text-gray-600 hover:text-gray-900 focus:outline-none"
                             aria-label="Menu"
+                            aria-expanded={isOpen}
                         >
                             {isOpen ? (
                                 <X className="w-6 h-6" />
@@ -422,14 +409,24 @@ const Navbar = () => {
                 {/* Mobile Menu */}
                 <AnimatePresence>
                     {isOpen && (
-                        <motion.div 
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="md:hidden overflow-hidden border-t border-gray-100"
-                        >
-                            <div className="py-4 space-y-1">
+                        <>
+                            {/* Fullscreen overlay for background dimming */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="fixed inset-0 bg-black/40 backdrop-blur-sm md:hidden"
+                                onClick={() => setIsOpen(false)}
+                            />
+                            <motion.div 
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="relative md:hidden overflow-hidden border-t border-gray-100 bg-white z-50"
+                            >
+                                <div className="py-4 space-y-1">
                                 <Link 
                                     to="/" 
                                     className={`block px-4 py-3 text-base font-medium ${location.pathname === '/' ? 'text-gray-900 bg-gray-50' : 'text-gray-600 hover:bg-gray-50'} transition-colors`}
@@ -495,8 +492,9 @@ const Navbar = () => {
                                         </button>
                                     </>
                                 )}
-                            </div>
-                        </motion.div>
+                                </div>
+                            </motion.div>
+                        </>
                     )}
                 </AnimatePresence>
             </div>

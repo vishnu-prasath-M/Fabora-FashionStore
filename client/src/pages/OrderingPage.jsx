@@ -1,7 +1,9 @@
-import { ArrowLeft, ShieldCheck, CreditCard, Banknote, Smartphone } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, CreditCard, Banknote, Smartphone, Lock } from 'lucide-react';
+import toast from 'react-hot-toast';
 import SuccessModal from '../components/SuccessModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { createOrder } from '../redux/slices/orderSlice';
+import { createOrder, resetOrder } from '../redux/slices/orderSlice';
+import { clearCart } from '../redux/slices/cartSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -9,8 +11,10 @@ const OrderingPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { cartItems } = useSelector((state) => state.cart);
+    const { userInfo } = useSelector((state) => state.auth);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('card'); // 'card', 'upi', 'cod'
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
     // Calculate totals
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
@@ -19,28 +23,43 @@ const OrderingPage = () => {
     const gst = subtotal * gstRate;
     const total = subtotal + shipping + gst;
 
-    const handlePayNow = () => {
-        dispatch(createOrder({
-            orderItems: cartItems.map(item => ({
-                name: item.name,
-                qty: item.qty,
-                image: item.image,
-                price: item.price,
-                product: item.product
-            })),
-            shippingAddress: {
-                address: '123 Fashion St',
-                city: 'Chennai',
-                postalCode: '600001',
-                country: 'India'
-            },
-            paymentMethod: paymentMethod === 'card' ? 'Card' : paymentMethod,
-            itemsPrice: subtotal,
-            shippingPrice: shipping,
-            taxPrice: gst,
-            totalPrice: total
-        }));
-        setShowSuccessModal(true);
+    const handlePayNow = async () => {
+        if (!userInfo) {
+            setShowLoginPrompt(true);
+            setTimeout(() => {
+                navigate('/login?redirect=/ordering');
+            }, 1400);
+            return;
+        }
+        try {
+            await dispatch(createOrder({
+                orderItems: (cartItems || []).filter(item => item && item.product).map(item => ({
+                    name: item.name,
+                    qty: item.qty,
+                    image: item.image,
+                    price: item.price,
+                    product: item.product,
+                    size: item.size,
+                    color: item.color
+                })),
+                shippingAddress: {
+                    address: '123 Fashion St',
+                    city: 'Chennai',
+                    postalCode: '600001',
+                    country: 'India'
+                },
+                paymentMethod: paymentMethod === 'card' ? 'Card' : paymentMethod,
+                itemsPrice: subtotal,
+                shippingPrice: shipping,
+                taxPrice: gst,
+                totalPrice: total
+            })).unwrap();
+
+            dispatch(clearCart());
+            setShowSuccessModal(true);
+        } catch (error) {
+            toast.error(error || 'Failed to create order. Please try again.');
+        }
     };
 
     const handleModalClose = () => {
@@ -69,6 +88,20 @@ const OrderingPage = () => {
             />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {showLoginPrompt && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
+                        <div className="bg-white rounded-3xl border border-gray-100 shadow-2xl p-10 w-full max-w-sm text-center animate-in fade-in">
+                            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gray-900 text-white flex items-center justify-center animate-pulse">
+                                <Lock className="w-10 h-10" />
+                            </div>
+                            <h3 className="text-2xl font-heading font-bold text-gray-900 mb-2 tracking-tight">Login before order</h3>
+                            <p className="text-gray-500 mb-6">Redirecting to login...</p>
+                            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-gray-900 animate-[progress_1.4s_ease-in-out_forwards]"></div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <button
                     onClick={() => navigate('/cart')}
                     className="group flex items-center text-gray-500 hover:text-gray-900 mb-8 transition-colors"
@@ -92,16 +125,16 @@ const OrderingPage = () => {
                                 Order Review
                             </h2>
                             <div className="space-y-6">
-                                {cartItems.map((item) => (
+                                {(cartItems || []).filter(item => item).map((item) => (
                                     <div key={item.product} className="flex gap-6 items-center">
                                         <div className="w-20 h-24 bg-gray-100 rounded-xl overflow-hidden shadow-inner flex-shrink-0">
                                             <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                         </div>
                                         <div className="flex-1">
                                             <h3 className="font-bold text-gray-900">{item.name}</h3>
-                                            <p className="text-sm text-gray-500 mt-1">Qty: {item.qty} &times; ${item.price}</p>
+                                            <p className="text-sm text-gray-500 mt-1">Qty: {item.qty} &times; ₹{item.price}</p>
                                         </div>
-                                        <p className="font-bold text-gray-900">${(item.price * item.qty).toFixed(2)}</p>
+                                        <p className="font-bold text-gray-900">₹{(item.price * item.qty).toLocaleString()}</p>
                                     </div>
                                 ))}
                             </div>
@@ -165,7 +198,7 @@ const OrderingPage = () => {
                             <div className="space-y-4 mb-8 text-gray-300">
                                 <div className="flex justify-between">
                                     <span>Subtotal</span>
-                                    <span className="text-white font-mono">${subtotal.toFixed(2)}</span>
+                                    <span className="text-white font-mono">₹{subtotal.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span>Shipping</span>
@@ -173,13 +206,13 @@ const OrderingPage = () => {
                                 </div>
                                 <div className="flex justify-between">
                                     <span>GST (18%)</span>
-                                    <span className="text-white font-mono">${gst.toFixed(2)}</span>
+                                    <span className="text-white font-mono">₹{gst.toLocaleString()}</span>
                                 </div>
                             </div>
 
                             <div className="border-t border-white/10 pt-6 mb-8 flex justify-between items-center">
                                 <span className="text-lg font-bold">Total</span>
-                                <span className="text-3xl font-bold font-mono">${total.toFixed(2)}</span>
+                                <span className="text-3xl font-bold font-mono">₹{total.toLocaleString()}</span>
                             </div>
 
                             <button

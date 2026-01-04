@@ -38,23 +38,22 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex bg-white">
-            {/* Left Side: Form */}
-            <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-24 py-12">
-                <div className="max-w-md w-full mx-auto">
-                    {/* Brand */}
-                    <div className="mb-10">
-                        <Link to="/" className="inline-flex items-center gap-2 group">
-                            <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center text-white group-hover:rotate-12 transition-transform duration-300">
-                                <Sparkles className="w-6 h-6" />
-                            </div>
-                            <span className="text-3xl font-heading font-bold tracking-tighter text-gray-900">FABORA</span>
-                        </Link>
-                    </div>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-gray-100 px-4 py-10">
+            <div className="w-full max-w-md">
+                <div className="text-center mb-8">
+                    <Link to="/" className="inline-flex items-center gap-3 group">
+                        <div className="w-12 h-12 bg-gray-900 rounded-2xl flex items-center justify-center text-white group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-gray-300/40">
+                            <Sparkles className="w-6 h-6" />
+                        </div>
+                        <span className="text-4xl font-heading font-bold tracking-tighter text-gray-900">FABORA</span>
+                    </Link>
+                    <p className="mt-2 text-gray-500">Premium Fashion E‑Commerce</p>
+                </div>
 
-                    <div className="mb-8">
-                        <h1 className="text-4xl font-heading font-bold text-gray-900 mb-3 tracking-tight">Create Account</h1>
-                        <p className="text-gray-500 text-lg font-light">Join FABORA and redefine your style</p>
+                <div className="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-200/40 p-8 sm:p-10">
+                    <div className="mb-6 text-center">
+                        <h1 className="text-3xl font-heading font-bold text-gray-900 tracking-tight">Create account</h1>
+                        <p className="text-gray-500 mt-1">Join FABORA and redefine your style</p>
                     </div>
 
                     <form onSubmit={submitHandler} className="space-y-5">
@@ -143,7 +142,7 @@ const RegisterPage = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gray-900 text-white py-4 rounded-2xl font-bold text-lg hover:bg-black hover:shadow-xl active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed mt-4"
+                            className="w-full bg-gray-900 text-white py-4 rounded-2xl font-bold text-lg hover:bg-black hover:shadow-2xl active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed mt-4"
                         >
                             {loading ? (
                                 <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -152,32 +151,15 @@ const RegisterPage = () => {
                             )}
                         </button>
                     </form>
-
-                    <div className="mt-10 text-center border-t border-gray-100 pt-8">
-                        <p className="text-gray-500">
-                            Already have an account?{' '}
-                            <Link to="/login" className="text-gray-900 font-bold hover:underline underline-offset-4 decoration-2 decoration-primary">
-                                Sign in
-                            </Link>
-                        </p>
-                    </div>
                 </div>
-            </div>
 
-            {/* Right Side: Image */}
-            <div className="hidden lg:block lg:w-1/2 relative bg-gray-100">
-                <img
-                    src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=2600&auto=format&fit=crop"
-                    alt="Register Fashion"
-                    className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-16">
-                    <div className="max-w-lg">
-                        <h3 className="text-4xl font-heading font-bold text-white mb-4">Your fashion journey starts here.</h3>
-                        <p className="text-gray-200 text-lg font-light leading-relaxed">
-                            Unlock exclusive access to early drops, member-only pricing, and personalized style recommendations.
-                        </p>
-                    </div>
+                <div className="mt-8 text-center">
+                    <p className="text-gray-500">
+                        Already have an account?{' '}
+                        <Link to="/login" className="text-gray-900 font-bold hover:underline underline-offset-4">
+                            Sign in
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

@@ -3,10 +3,10 @@ import axios from '../../utils/axios';
 
 export const listProducts = createAsyncThunk(
     'products/list',
-    async ({ keyword = '', pageNumber = '' } = {}, { rejectWithValue }) => {
+    async ({ keyword = '', pageNumber = '', category = '' } = {}, { rejectWithValue }) => {
         try {
             const { data } = await axios.get(
-                `/products?keyword=${keyword}&pageNumber=${pageNumber}`
+                `/products?keyword=${keyword}&pageNumber=${pageNumber}&category=${category}`
             );
             return data;
         } catch (error) {

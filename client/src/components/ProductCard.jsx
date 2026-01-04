@@ -14,6 +14,8 @@ const ProductCard = ({ product, isFakestoreProduct = false }) => {
     const dispatch = useDispatch();
     const { wishlistItems } = useSelector((state) => state.wishlist);
 
+    if (!product) return null;
+
     // Normalize product data structure
     const productId = isFakestoreProduct ? product.id : product._id;
     const productName = isFakestoreProduct ? product.title : product.name;
@@ -23,8 +25,8 @@ const ProductCard = ({ product, isFakestoreProduct = false }) => {
     const productOldPrice = product.oldPrice || null;
     const productStock = product.countInStock || 999;
 
-    const isInWishlist = wishlistItems.some((item) =>
-        isFakestoreProduct ? item.id === productId : item._id === productId
+    const isInWishlist = (wishlistItems || []).some((item) =>
+        item && (isFakestoreProduct ? item.id === productId : item._id === productId)
     );
 
     const handleAddToCart = () => {

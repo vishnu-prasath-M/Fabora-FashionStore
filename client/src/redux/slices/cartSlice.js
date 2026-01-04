@@ -16,21 +16,23 @@ const cartSlice = createSlice({
     reducers: {
         addToCart: (state, action) => {
             const item = action.payload;
-            const existItem = state.cartItems.find((x) => x.product === item.product);
+            if (!item) return;
+
+            const existItem = (state.cartItems || []).find((x) => x && x.product === item.product);
 
             if (existItem) {
                 state.cartItems = state.cartItems.map((x) =>
-                    x.product === existItem.product ? item : x
-                );
+                    x && x.product === existItem.product ? item : x
+                ).filter(Boolean);
             } else {
-                state.cartItems = [...state.cartItems, item];
+                state.cartItems = [...(state.cartItems || []), item].filter(Boolean);
             }
 
             localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
         },
         removeFromCart: (state, action) => {
-            state.cartItems = state.cartItems.filter(
-                (x) => x.product !== action.payload
+            state.cartItems = (state.cartItems || []).filter(
+                (x) => x && x.product !== action.payload
             );
             localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
         },

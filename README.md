@@ -77,13 +77,12 @@ JWT_SECRET=your_jwt_secret_here
 
 6. **Seed the database** (optional)
 ```bash
-cd server
-node seeder.js
+npm run data:import
 ```
 
 To destroy data:
 ```bash
-node seeder.js -d
+npm run data:destroy
 ```
 
 ## 🏃 Running the Application
