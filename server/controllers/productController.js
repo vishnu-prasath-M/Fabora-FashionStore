@@ -1,5 +1,10 @@
 import asyncHandler from 'express-async-handler';
+import bcrypt from 'bcryptjs';
 import Product from '../models/Product.js';
+import User from '../models/User.js';
+import Order from '../models/Order.js';
+import users from '../data/users.js';
+import products from '../data/products.js';
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -164,6 +169,30 @@ const getTopProducts = asyncHandler(async (req, res) => {
     res.json(products);
 });
 
+// @desc    Seed the database
+// @route   POST /api/products/seed
+// @access  Public (for initialization)
+const seedDatabase = asyncHandler(async (req, res) => {
+    await Order.deleteMany({});
+    await Product.deleteMany({});
+    await User.deleteMany({});
+
+    const createdUsers = await User.insertMany(users.map(user => ({
+        ...user,
+        password: bcrypt.hashSync(user.password, 10)
+    })));
+
+    const adminUser = createdUsers[0]._id;
+
+    const sampleProducts = products.map((product) => {
+        return { ...product, user: adminUser };
+    });
+
+    await Product.insertMany(sampleProducts);
+
+    res.json({ message: 'Database seeded successfully' });
+});
+
 export {
     getProducts,
     getProductById,
@@ -172,4 +201,5 @@ export {
     updateProduct,
     createProductReview,
     getTopProducts,
+    seedDatabase,
 };
