@@ -33,7 +33,7 @@ const OrdersPage = () => {
     const confirmCancel = async () => {
         try {
             await dispatch(cancelOrder({ orderId: selectedOrderId, itemId: selectedItemId })).unwrap();
-            toast.success('Item terminated successfully', {
+            toast.success('Item Cancelled successfully', {
                 icon: '🛡️',
                 style: {
                     borderRadius: '1rem',
@@ -141,7 +141,7 @@ const OrdersPage = () => {
                                                         <p className={`text-xl font-heading font-bold mb-4 ${item.isCancelled ? 'text-gray-400' : 'text-gray-900'}`}>₹{(item.price * item.qty).toLocaleString()}</p>
                                                         {item.isCancelled ? (
                                                             <div className="w-full text-center">
-                                                                <span className="text-red-500 font-bold text-sm uppercase tracking-widest">Item terminated successfully</span>
+                                                                <span className="text-red-500 font-bold text-sm uppercase tracking-widest">Item Cancelled successfully</span>
                                                             </div>
                                                         ) : !order.isDelivered && (
                                                             <button
