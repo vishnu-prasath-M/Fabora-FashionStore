@@ -177,10 +177,9 @@ const HomePage = () => {
                             <div className="flex flex-col sm:flex-row gap-4 pt-6 justify-center md:justify-start">
                                 <Link
                                     to="/shop"
-                                    className="group relative px-8 py-4 bg-[#D4AF37] text-black font-bold text-lg uppercase tracking-widest hover:bg-white transition-colors duration-300 overflow-hidden"
+                                    className="relative px-8 py-4 bg-[#D4AF37] text-black font-bold text-lg uppercase tracking-widest hover:bg-white hover:text-black hover:ring-2 hover:ring-[#D4AF37] transition-all duration-300"
                                 >
-                                    <div className="absolute inset-0 w-full h-full bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 mix-blend-difference"></div>
-                                    <span className="relative flex items-center gap-2">
+                                    <span className="flex items-center gap-2">
                                         Shop The Sale <ArrowRight className="w-5 h-5" />
                                     </span>
                                 </Link>
