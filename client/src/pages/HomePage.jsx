@@ -113,203 +113,129 @@ const HomePage = () => {
 
     return (
         <div>
-            {/* Classic Premium Hero Section */}
+            {/* Festival Sale Poster - Hero Section */}
             <section
                 ref={heroRef}
-                className="relative min-h-screen flex items-center overflow-hidden bg-white"
+                className="relative min-h-[90vh] flex items-center bg-[#0a0a0a] overflow-hidden"
             >
-                {/* Elegant Background Pattern */}
-                <div className="absolute inset-0">
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-amber-50/30"></div>
-                    <div className="absolute inset-0 opacity-[0.03]" style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-                    }}></div>
+                {/* Background Texture & Overlay */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=2274&auto=format&fit=crop"
+                        alt="Fashion Background"
+                        className="w-full h-full object-cover opacity-40 hidden md:block" // Desktop Image
+                    />
+                    <img
+                        src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1000&auto=format&fit=crop"
+                        alt="Fashion Background Mobile"
+                        className="w-full h-full object-cover opacity-50 md:hidden" // Mobile Image
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
                 </div>
 
-                {/* Decorative Lines */}
-                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 py-12 md:py-0">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-12">
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-20 relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                        {/* Left Content */}
-                        <div className="space-y-10">
-                            {/* Elegant Badge */}
-                            <div className="hero-subtitle inline-block">
-                                <div className="relative group">
-                                    <div className="flex items-center gap-3 px-6 py-3 border border-gray-900/10 rounded-full bg-white shadow-sm hover:shadow-md transition-all duration-300">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></div>
-                                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-gray-900">
-                                            New Collection 2024
-                                        </span>
-                                    </div>
+                        {/* Left Content - Poster Style */}
+                        <div className="w-full md:w-1/2 text-center md:text-left space-y-8">
+
+                            {/* Festival Badge */}
+                            <div className="inline-flex items-center gap-2 px-4 py-2 border border-[#D4AF37] rounded-sm bg-black/50 backdrop-blur-md mx-auto md:mx-0">
+                                <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
+                                <span className="text-[#D4AF37] text-xs font-bold tracking-[0.3em] uppercase font-heading">
+                                    Festival Edit 2024
+                                </span>
+                            </div>
+
+                            {/* Main Typography */}
+                            <div className="space-y-4">
+                                <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-medium text-white leading-[0.9] tracking-tight">
+                                    GRAND <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F1C40F] to-[#B7950B] italic font-serif">
+                                        SEASON SALE
+                                    </span>
+                                </h1>
+                                <p className="text-gray-300 text-lg md:text-xl font-light tracking-wide max-w-lg mx-auto md:mx-0">
+                                    Elevate your wardrobe with our exclusive festival collection.
+                                    Timeless elegance meets modern luxury.
+                                </p>
+                            </div>
+
+                            {/* Offer Box */}
+                            <div className="flex flex-col md:flex-row items-center gap-6 mt-8">
+                                <div className="border-l-4 border-[#D4AF37] pl-6 text-left bg-gradient-to-r from-white/5 to-transparent p-4 rounded-r-xl">
+                                    <p className="text-white text-sm uppercase tracking-widest mb-1">Limited Time Offer</p>
+                                    <p className="text-4xl font-bold text-white">
+                                        FLAT <span className="text-[#D4AF37]">50% OFF</span>
+                                    </p>
+                                    <p className="text-gray-400 text-xs mt-1">*On selected premium brands</p>
                                 </div>
                             </div>
 
-                            {/* Sophisticated Title */}
-                            <div className="hero-title space-y-6">
-                                <h1 className="text-6xl md:text-7xl lg:text-8xl font-heading font-bold leading-[0.95] tracking-tight">
-                                    <span className="block text-gray-900">
-                                        Timeless
-                                    </span>
-                                    <span className="block text-gray-900 relative inline-block">
-                                        Elegance
-                                        <svg className="absolute -bottom-2 left-0 w-full h-3 text-amber-600/20" viewBox="0 0 200 12" preserveAspectRatio="none">
-                                            <path d="M0,7 Q50,0 100,7 T200,7" fill="none" stroke="currentColor" strokeWidth="3" />
-                                        </svg>
-                                    </span>
-                                </h1>
-                            </div>
-
-                            {/* Refined Description */}
-                            <p className="hero-subtitle text-xl md:text-2xl text-gray-600 max-w-lg leading-relaxed font-light">
-                                Discover curated fashion that transcends trends.
-                                <span className="text-gray-900 font-normal"> Premium quality</span>, exceptional craftsmanship.
-                            </p>
-
-                            {/* Sophisticated CTA */}
-                            <div className="hero-cta flex flex-col sm:flex-row gap-4 pt-4">
+                            {/* Buttons */}
+                            <div className="flex flex-col sm:flex-row gap-4 pt-6 justify-center md:justify-start">
                                 <Link
                                     to="/shop"
-                                    className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 text-base font-semibold overflow-hidden bg-gray-900 text-white transition-all duration-300 hover:bg-gray-800 hover:shadow-2xl hover:shadow-gray-900/20"
+                                    className="group relative px-8 py-4 bg-[#D4AF37] text-black font-bold text-lg uppercase tracking-widest hover:bg-white transition-colors duration-300 overflow-hidden"
                                 >
-                                    <span className="relative uppercase tracking-[0.15em]">Explore Collection</span>
-                                    <ArrowRight className="relative w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    <div className="absolute inset-0 w-full h-full bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 mix-blend-difference"></div>
+                                    <span className="relative flex items-center gap-2">
+                                        Shop The Sale <ArrowRight className="w-5 h-5" />
+                                    </span>
                                 </Link>
                                 <a
                                     href="#featured"
-                                    className="group inline-flex items-center justify-center gap-3 px-10 py-5 text-base font-semibold border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300"
+                                    className="px-8 py-4 border border-white/30 text-white font-medium text-lg uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
                                 >
-                                    <span className="uppercase tracking-[0.15em]">View Lookbook</span>
-                                    <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
+                                    View Lookbook
                                 </a>
-                            </div>
-
-                            {/* Refined Stats */}
-                            <div className="grid grid-cols-3 gap-8 pt-12 border-t border-gray-200">
-                                {[
-                                    { value: `${products.length}+`, label: 'Curated Pieces', icon: '◆' },
-                                    { value: '10k+', label: 'Global Clients', icon: '◆' },
-                                    { value: '4.8★', label: 'Excellence', icon: '◆' }
-                                ].map((stat, index) => (
-                                    <div key={index} className="group">
-                                        <div className="space-y-2">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-amber-600 text-xs">{stat.icon}</span>
-                                                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
-                                                    {stat.label}
-                                                </p>
-                                            </div>
-                                            <p className="text-4xl md:text-5xl font-heading font-bold text-gray-900 tracking-tight">
-                                                {stat.value}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
                             </div>
                         </div>
 
-                        {/* Right - Elegant Image Composition */}
-                        <div className="relative lg:h-[700px] hidden lg:block">
-                            {/* Main Featured Image */}
-                            <div className="hero-image absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-[500px] animate-float-subtle">
-                                <div className="relative group h-full">
-                                    <div className="absolute -inset-4 bg-gradient-to-br from-amber-100/50 to-gray-100/50 blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
-                                    <div className="relative h-full bg-white shadow-2xl overflow-hidden border border-gray-100">
+                        {/* Right Content - Visual Showcase (Desktop Only, Mobile uses bg) */}
+                        <div className="hidden md:block w-full md:w-1/2 relative h-[600px]">
+                            {/* Central Floating Image with Gold Frame */}
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[350px] h-[500px] border border-[#D4AF37]/30 p-4 animate-float-subtle">
+                                <div className="w-full h-full relative">
+                                    <div className="absolute inset-0 border border-[#D4AF37] transform translate-x-4 translate-y-4 z-0"></div>
+                                    <div className="absolute inset-0 bg-gray-900 overflow-hidden z-10 shadow-2xl">
                                         <img
-                                            src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80"
-                                            alt="Featured Fashion"
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                            src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1000&auto=format&fit=crop"
+                                            alt="Fashion Model"
+                                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000 grayscale hover:grayscale-0"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                                        <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                                            <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 mb-3">
-                                                <span className="text-xs font-bold uppercase tracking-[0.2em]">
-                                                    Signature Collection
-                                                </span>
-                                            </div>
-                                            <h3 className="text-2xl font-heading font-bold mb-2">Premium Essentials</h3>
-                                            <p className="text-white/80 text-sm font-light">From ₹2,999</p>
+
+                                        {/* Floating Tag */}
+                                        <div className="absolute top-4 right-4 bg-black/80 backdrop-blur text-white px-4 py-2 border border-[#D4AF37]">
+                                            <span className="text-xs font-bold uppercase tracking-widest">Premium</span>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            {/* Accent Image 1 - Top Left */}
-                            <div className="hero-image absolute top-0 left-0 w-52 h-64 animate-float-subtle animation-delay-1000">
-                                <div className="relative group h-full">
-                                    <div className="absolute -inset-2 bg-gray-100 blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-                                    <div className="relative h-full bg-white shadow-xl overflow-hidden border border-gray-100">
-                                        <img
-                                            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80"
-                                            alt="Fashion Item"
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                        <div className="absolute top-4 right-4">
-                                            <div className="w-12 h-12 bg-white/90 backdrop-blur-sm flex items-center justify-center border border-gray-200">
-                                                <span className="text-xs font-bold text-gray-900">NEW</span>
-                                            </div>
+                                        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6">
+                                            <p className="text-[#D4AF37] font-serif italic text-xl">The Royal Edition</p>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Accent Image 2 - Top Right */}
-                            <div className="hero-image absolute top-20 right-0 w-48 h-60 animate-float-subtle animation-delay-2000">
-                                <div className="relative group h-full">
-                                    <div className="absolute -inset-2 bg-amber-100 blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-                                    <div className="relative h-full bg-white shadow-xl overflow-hidden border border-gray-100">
-                                        <img
-                                            src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80"
-                                            alt="Fashion Item"
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Accent Image 3 - Bottom Left */}
-                            <div className="hero-image absolute bottom-0 left-16 w-44 h-56 animate-float-subtle animation-delay-3000">
-                                <div className="relative group h-full">
-                                    <div className="absolute -inset-2 bg-gray-100 blur-xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-                                    <div className="relative h-full bg-white shadow-xl overflow-hidden border border-gray-100">
-                                        <img
-                                            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80"
-                                            alt="Fashion Item"
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Accent Image 4 - Bottom Right */}
-                            <div className="hero-image absolute bottom-16 right-20 w-40 h-52 animate-float-subtle animation-delay-4000">
-                                <div className="relative group h-full">
-                                    <div className="absolute -inset-2 bg-amber-100 blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-                                    <div className="relative h-full bg-white shadow-xl overflow-hidden border border-gray-100">
-                                        <img
-                                            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80"
-                                            alt="Fashion Item"
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Decorative Elements */}
-                            <div className="absolute top-1/3 right-1/3 w-24 h-24 border border-amber-600/10 animate-spin-slow"></div>
-                            <div className="absolute bottom-1/3 left-1/3 w-20 h-20 border border-gray-900/10 animate-spin-slow animation-delay-2000"></div>
+                            <div className="absolute -top-10 right-10 w-32 h-32 bg-[#D4AF37]/10 rounded-full blur-3xl animate-pulse"></div>
+                            <div className="absolute bottom-10 left-10 w-40 h-40 bg-purple-900/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
                         </div>
                     </div>
                 </div>
 
-                {/* Elegant Scroll Indicator */}
-                <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-                    <div className="flex flex-col items-center gap-3 animate-bounce-subtle">
-                        <div className="w-px h-16 bg-gradient-to-b from-transparent via-gray-400 to-transparent"></div>
-                        <span className="text-xs font-medium uppercase tracking-[0.3em] text-gray-400">Scroll</span>
+                {/* Bottom Ticker/Banner using marquee-like effect */}
+                <div className="absolute bottom-0 w-full bg-[#D4AF37] py-2 overflow-hidden whitespace-nowrap">
+                    <div className="animate-marquee inline-block">
+                        <span className="text-black font-bold uppercase tracking-widest text-sm mx-8">★ FREE SHIPPING ON ALL ORDERS ABOVE ₹999</span>
+                        <span className="text-black font-bold uppercase tracking-widest text-sm mx-8">★ EXTRA 10% OFF WITH HDFC CARDS</span>
+                        <span className="text-black font-bold uppercase tracking-widest text-sm mx-8">★ 30-DAY EASY RETURNS</span>
+                        <span className="text-black font-bold uppercase tracking-widest text-sm mx-8">★ NEW STYLES ADDED DAILY</span>
+                        <span className="text-black font-bold uppercase tracking-widest text-sm mx-8">★ FREE SHIPPING ON ALL ORDERS ABOVE ₹999</span>
+                        <span className="text-black font-bold uppercase tracking-widest text-sm mx-8">★ EXTRA 10% OFF WITH HDFC CARDS</span>
+                        <span className="text-black font-bold uppercase tracking-widest text-sm mx-8">★ 30-DAY EASY RETURNS</span>
+                        <span className="text-black font-bold uppercase tracking-widest text-sm mx-8">★ NEW STYLES ADDED DAILY</span>
                     </div>
                 </div>
             </section>
