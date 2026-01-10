@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Mail } from 'lucide-react';
+import logo from '../assets/logo.png';
 
 const Footer = () => {
     return (
@@ -8,7 +9,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Brand */}
                     <div>
-                        <h2 className="text-2xl font-heading font-bold text-white mb-4">FABORA</h2>
+                        <img src={logo} alt="FABORA" className="h-8 mb-4" />
                         <p className="text-white/70 mb-4">Wear Your Story.</p>
                         <p className="text-white/70 text-sm">
                             Premium fashion for those who dare to be different.

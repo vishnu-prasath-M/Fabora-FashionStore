@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
 import { ShoppingBag, Heart, User, Menu, X, Search, ChevronDown, ChevronUp, ShoppingCart, LogOut, UserCog, Package, Home, Store, Info, Phone, LogIn, UserPlus } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import logo from '../assets/logo.png';
 
 // NavLink component with active state
 const NavLink = ({ to, children, icon: Icon, isMobile = false }) => {
@@ -17,8 +18,8 @@ const NavLink = ({ to, children, icon: Icon, isMobile = false }) => {
         >
             <motion.span
                 className={`flex items-center gap-2 transition-colors duration-300 ${isActive
-                        ? 'text-primary-600 font-medium'
-                        : 'text-gray-700 hover:text-primary-600'
+                    ? 'text-primary-600 font-medium'
+                    : 'text-gray-700 hover:text-primary-600'
                     }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -147,13 +148,13 @@ const Navbar = () => {
                         transition={{ duration: 0.5 }}
                     >
                         <Link to="/" className="flex items-center group">
-                            <motion.span
-                                className="text-3xl font-serif font-bold bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent"
+                            <motion.img
+                                src={logo}
+                                alt="FABORA"
+                                className="h-8 w-auto"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                            >
-                                FABORA
-                            </motion.span>
+                            />
                             <motion.span
                                 className="ml-2 text-xs text-gray-500 font-light italic hidden sm:inline-block"
                                 initial={{ opacity: 0, x: -10 }}
